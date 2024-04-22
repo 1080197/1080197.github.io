@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Art Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Basic styles for layout */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #333;
+            padding: 15px;
+            text-align: left;
+            color: #fff;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0 15px;
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #bbb;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .info-text {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        /* Tag styles for filtering */
+        .tags {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .tag:hover {
+            background-color: #ddd;
+            color: #000;
+        }
+
+        /* Grid styles for artwork */
+        .art-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .art-item {
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s;
+            background: #f0f0f0;
+            text-align: center;
+        }
+
+        .art-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s;
+        }
+
+        .art-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .art-item .title {
+            color: #333;
+            padding: 10px;
+            text-transform: uppercase;
+            font-size: 1em;
+        }
+
+        .art-item .tags {
+            font-size: 0.9em;
+            color: #777;
+            padding: 5px 10px;
+            display: inline-block;
+        }
+
+        .art-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .art-item {
+                flex: 1 1 calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .art-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        /* Lightbox styles */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 80%;
+            max-height: 80%;
+            text-align: center;
+        }
+
+        .lightbox img {
+            width: 100%;
+            height: auto;
+            max-width: 600px;
+        }
+
+        .lightbox-caption {
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px;
+            transition: color 0.3s;
+        }
+
+        .arrow:hover {
+            color: #aaa;
+        }
+
+        .arrow-left {
+            left: 10px;
+        }
+
+        .arrow-right {
+            right: 10px;
+        }
+
+        /* Footer style */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        function showLightbox(artId) {
+            // Lightbox gallery data
+            const artGalleries = {
+                "lawful_assembly": [
+                    { src: "lawful_assembly_1.jpg", caption: "Lawful Assembly - Image 1" },
+                    { src: "lawful_assembly_2.jpg", caption: "Lawful Assembly - Image 2" }
+                ],
+                "depression": [
+                    { src: "depression_1.jpg", caption: "Depression - Image 1" },
+                    { src: "depression_2.jpg", caption: "Depression - Image 2" }
+                ],
+                "sunflower_field": [
+                    { src: "sunflower_field_1.jpg", caption: "Sunflower Field - Image 1" },
+                    { src: "sunflower_field_2.jpg", caption: "Sunflower Field - Image 2" }
+                ],
+                "stone_of_perseverance": [
+                    { src: "stone_of_perseverance_1.jpg", caption: "Stone of Perseverance - Image 1" },
+                    { src: "stone_of_perseverance_2.jpg", caption: "Stone of Perseverance - Image 2" }
+                ],
+                "a_crane_looking_back": [
+                    { src: "a_crane_looking_back_1.jpg", caption: "A Crane Looking Back - Image 1" },
+                    { src: "a_crane_looking_back_2.jpg", caption: "A Crane Looking Back - Image 2" }
+                ],
+                "ra_ra_ra": [
+                    { src: "ra_ra_ra_1.jpg", caption: "RA RA RA - Image 1" },
+                    { src: "ra_ra_ra_2.jpg", caption: "RA RA RA - Image 2" }
+                ],
+                "oxford_war_memorial": [
+                    { src: "oxford_war_memorial_1.jpg", caption: "Oxford War Memorial - Image 1" },
+                    { src: "oxford_war_memorial_2.jpg", caption: "Oxford War Memorial - Image 2" }
+                ],
+                "oxford_war_memorial": [
+                    { src: "oxford_war_memorial_1.jpg", caption: "Oxford War Memorial - Image 1" },
+                    { src: "oxford_war_memorial_2.jpg", caption: "Oxford War Memorial - Image 2" }
+                ]
+            };
+
+            const lightbox = document.querySelector('.lightbox');
+            const lightboxContent = document.querySelector('.lightbox-content');
+            const lightboxCaption = document.querySelector('.lightbox-caption');
+            const lightboxImg = document.querySelector('.lightbox img');
+            const leftArrow = document.querySelector('.arrow-left');
+            const rightArrow = document.querySelector('.arrow-right');
+
+            let currentImageIndex = 0;
+
+            function showImage(index) {
+                const image = artGalleries[artId][index];
+                lightboxImg.src = image.src;
+                lightboxCaption.textContent = image.caption;
+                currentImageIndex = index;
+            }
+
+            // Event handlers for arrow navigation
+            leftArrow.onclick = () => {
+                const newIndex = currentImageIndex - 1;
+                if (newIndex >= 0) {
+                    showImage(newIndex);
+                }
+            };
+
+            rightArrow.onclick = () => {
+                const newIndex = currentImageIndex + 1;
+                if (newIndex < artGalleries[artId].length) {
+                    showImage(newIndex);
+                }
+            };
+
+            lightbox.style.display = 'flex';
+            showImage(currentImageIndex);
+        }
+
+        function closeLightbox() {
+            const lightbox = document.querySelector('.lightbox');
+            lightbox.style.display = 'none';
+        }
+
+        function filterArtworks(tag) {
+            const artItems = document.querySelectorAll('.art-item');
+            const tagMessage = document.getElementor('tag-message');
+
+            artItems.forEach((item) => {
+                const tags = item.getAttribute('data-tags').split(',').map(t => t.trim());
+                if (tags.includes(tag) || tag === 'all') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const tagName = tag === 'all' ? 'all' : tag;
+            tagMessage.textContent = `Showing ${tagName} works.`;
+        }
+    </script>
+</head>
+<body>
+    <!-- Navigation bar with links -->
+    <div class="navbar">
+        <a href="#home">Home</a>
+        <a href="#bio">Bio</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Information and filtering message -->
+    <div class="content">
+        <div class="info-text">Portfolio of select artworks created during the programme.</div>
+        <div id="tag-message" class="info-text">Showing all works.</div>
+
+        <!-- Tags for filtering -->
+        <div class="tags">
+            <div class="tag" onclick="filterArtworks('all')">All</div>
+            <div class="tag" onclick="filterArtworks('installation')">Installation</div>
+            <div class="tag" onclick="filterArtworks('painting')">Painting</div>
+            <div class="tag" onclick="filterArtworks('sound art')">Sound Art</div>
+            <div class="tag" onclick="filterArtworks('process art')">Process Art</div>
+            <div class="tag" onclick="filterArtworks('printmaking')">Printmaking</div>
+            <div class="tag" onclick="filterArtworks('performance')">Performance</div>
+            <div class="tag" onclick="filterArtworks('moving image')">Moving Image</div>
+            <div class="tag" onclick="filterArtworks('sculpture')">Sculpture</div>
+            <div class="tag" onclick="filterArtworks('photography')">Photography</div>
+        </div>
+
+        <!-- Grid of art items -->
+        <div class="art-grid">
+            <!-- Lawful Assembly -->
+            <div class="art-item" data-tags="installation, sculpture, moving image, printmaking" onclick="showLightbox('lawful_assembly')">
+                <img src="lawful_assembly.jpg" alt="Lawful Assembly">
+                <div class="title">Lawful Assembly</div>
+                <div class="tags">Installation, Sculpture, Moving Image, Printmaking</div>
+            </div>
+
+            <!-- Depression -->
+            <div class="art-item" data-tags="painting, sound art, installation, process art, performance" onclick="showLightbox('depression')">
+                <img src="depression.jpg" alt="Depression">
+                <div class="title">Depression</div>
+                <div class="tags">Painting, Sound Art, Installation, Process Art, Performance</div>
+            </div>
+
+            <!-- Sunflower Field -->
+            <div class="art-item" data-tags="installation, printmaking" onclick="showLightbox('sunflower_field')">
+                <img src="sunflower_field.jpg" alt="Sunflower Field">
+                <div class="title">Sunflower Field</div>
+                <div class="tags">Installation, Printmaking</div>
+            </div>
+
+            <!-- Stone of Perseverance -->
+            <div class="art-item" data-tags="sculpture" onclick="showLightbox('stone_of_perseverance')">
+                <img src="stone_of_perseverance.jpg" alt="Stone of Perseverance">
+                <div class="title">Stone of Perseverance</div>
+                <div class="tags">Sculpture</div>
+            </div>
+
+            <!-- A Crane Looking Back -->
+            <div class="art-item" data-tags="painting, printmaking, process art" onclick="showLightbox('a_crane_looking_back')">
+                <img src="a_crane_looking_back.jpg" alt="A Crane Looking Back">
+                <div class="title">A Crane Looking Back</div>
+                <div class="tags">Painting, Printmaking, Process Art</div>
+            </div>
+
+            <!-- RA RA RA -->
+            <div class="art-item" data-tags="printmaking" onclick="showLightbox('ra_ra_ra')">
+                <img src="ra_ra_ra.jpg" alt="RA RA RA">
+                <div class="title">RA RA RA</div>
+                <div class="tags">Printmaking</div>
+            </div>
+        </div>
+                <!-- Oxford War Memorial -->
+                <div class="art-item" data-tags="printmaking, process art, painting" onclick="showLightbox('oxford_war_memorial')">
+                <img src="oxford_war_memorial.jpg" alt="Oxford War Memorial">
+                <div class="title">Oxford War Memorial</div>
+                <div class="tags">Printmaking, Process Art, Painting</div>
+            </div>
+
+                <!-- Rose in Jerry Can -->
+                <div class="art-item" data-tags="sculpture" onclick="showLightbox('rose_in_jerry_can'）">
+                <img src="rose_in_jerry_can.jpg" alt="Rose in Jerry Can">
+                <div class="title">Rose in Jerry Can</div>
+                <div class="tags">Sculpture</div>
+            </div>
+
+                <!-- Karma -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('karma')">
+                <img src="karma.jpg" alt="Karma">
+                <div class="title">Karma</div>
+                <div class="tags">Printmaking</div>
+            </div>
+      
+                <!-- Redpeace -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('redpeace')">
+                <img src="redpeace.jpg" alt="Redpeace">
+                <div class="title">Redpeace</div>
+                <div class="tags">Printmaking</div>
+            </div>
+      
+                <!-- Gloves -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('gloves')">
+                <img src="gloves.jpg" alt="Gloves">
+                <div class="title">Gloves</div>
+                <div class="tags">Printmaking</div>
+            </div>
+
+                <!-- Stay Strong -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('stay_strong')">
+                <img src="stay_strong.jpg" alt="Stay Strong">
+                <div class="title">Stay Strong</div>
+                <div class="tags">Printmaking</div>
+            </div>
+
+                 <!-- How to Use a Fire Extinguisher -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('how_to_use_a_fire_extinguisher')">
+                <img src="how_to_use_a_fire_extinguisher.jpg" alt="How to Use a Fire Extinguisher">
+                <div class="title">How to Use a Fire Extinguisher</div>
+                <div class="tags">Printmaking</div>
+            </div>
+
+                <!-- Seen/Unseen -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('seen_unseen')">
+                <img src="seen_unseen.jpg" alt="Seen/Unseen">
+                <div class="title">Seen/Unseen</div>
+                <div class="tags">Printmaking</div>
+            </div>
+
+                <!-- Flower Under Fire -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('flower_under_fire')">
+                <img src="flower_under_fire.jpg" alt="Flower Under Fire">
+                <div class="title">Flower Under Fire</div>
+                <div class="tags">Printmaking</div>
+            </div>
+
+                <!-- Tinder Sociology -->
+                <div class="art-item" data-tags="printmaking" onclick="showLightbox('tinder_sociology')">
+                <img src="tinder_sociology.jpg" alt="Tinder Sociology">
+                <div class="title">Tinder Sociology</div>
+                <div class="tags">Printmaking</div>
+            </div>
+
+                <!-- Potato Peace -->
+                <div class="art-item" data-tags="photography" onclick="showLightbox('potato_peace')">
+                <img src="potato_peace.jpg" alt="Potato Peace">
+                <div class="title">Potato Peace</div>
+                <div class="tags">Photography</div>
+            </div>
+
+                <!-- Diu Series -->
+                <div class="art-item" data-tags="printmaking, sculpture" onclick="showLightbox('diu_series')">
+                <img src="diu_series.jpg" alt="Diu Series">
+                <div class="title">Diu Series</div>
+                <div class="tags">Printmaking, Sculpture</div>
+            </div>
+
+        <!-- Lightbox for photo gallery -->
+        <div class="lightbox" onclick="closeLightbox()">
+            <div class="lightbox-content" onclick="event.stopPropagation()">
+                <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+                <i class="arrow arrow-left fas fa-chevron-left"></i>
+                <img src="" alt="Lightbox Image">
+                <div class="lightbox-caption">Caption Text</div>
+                <i class="arrow arrow-right fas fa-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer with subscription information -->
+    <div class="footer">
+        Subscribe for more art updates!
+    </div>
+</body>
+</html>
