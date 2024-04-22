@@ -64,7 +64,7 @@
             color: #000;
         }
 
-        /* Grid styles for artwork with adaptive responsiveness */
+        /* Grid styles for artwork */
         .art-grid {
             display: flex;
             flex-wrap: wrap;
@@ -73,7 +73,7 @@
         }
 
         .art-item {
-            flex: 1 1 calc(33.333% - 20px); /* Default 3 columns */
+            flex: 1 1 calc(33.333% - 20px);
             box-sizing: border-box;
             position: relative;
             cursor: pointer;
@@ -99,7 +99,6 @@
             padding: 10px;
             text-transform: uppercase;
             font-size: 1em;
-            transition: background-color 0.3s; /* Add transition for smooth hover effect */
         }
 
         .art-item .tags {
@@ -110,24 +109,18 @@
         }
 
         .art-item:hover {
-            background-color: #e0e0e0; /* Default hover color */
+            background-color: #e0e0e0;
         }
 
-        /* Highlight the title on hover with yellow background */
-        .art-item:hover .title {
-            background-color: yellow;
-        }
-
-        /* Media queries for responsiveness */
         @media (max-width: 768px) {
             .art-item {
-                flex: 1 1 calc(50% - 20px); /* Switch to 2 columns */
+                flex: 1 1 calc(50% - 20px);
             }
         }
 
         @media (max-width: 480px) {
             .art-item {
-                flex: 1 1 100%; /* Switch to 1 column for smaller screens */
+                flex: 1 1 100%;
             }
         }
 
@@ -207,7 +200,168 @@
 
     <script>
         function showLightbox(artId) {
-            // Lightbox data and interactions
+            // Lightbox gallery data
+            const artGalleries = {
+                "lawful_assembly": [
+                    { src: "lawful_assembly_1.jpg", caption: "Lawful Assembly. 2024. Emulsion paint on fibreboard, evolving incense of British and Chinese herbs, sand, Jesmonite, video projection (5 min), cardboard box, packing peanuts, risograph booklets, laser print on paper, aluminium foil, PLA plastic." },
+                    { src: "lawful_assembly_2.jpg", caption: "i explore the idea that a moving image can be multisensory and experienced in three dimensions" },
+                    { src: "lawful_assembly_3.jpg", caption: "and that only with a good eye, in certain directions at certain times, can one see others\u2019 grief and injustice" },
+                    { src: "lawful_assembly_4.jpg", caption: "\u2026" },
+                    { src: "lawful_assembly_5.jpg", caption: "i question how individuals construct truth, beliefs and ideologies in society" },
+                    { src: "lawful_assembly_6.jpg", caption: "and the roles, authenticity, opacity and limitations of speech, texts and mobile media in mass and personal communication" },
+                    { src: "lawful_assembly_7.jpg", caption: "\u2026" },
+                    { src: "lawful_assembly_8.jpg", caption: "i breathe in \u2026" },
+                    { src: "lawful_assembly_9.jpg", caption: "i breathe in the futility of sharing hope and the sense of crisis in usual silence" },
+                    { src: "lawful_assembly_10.jpg", caption: "\u2026" }
+                ],
+             
+    "depression": [
+        { "src": "depression_1.jpg", "caption": "Depression. 2023. Performance: 10 min. Canvas, acrylic, rope, glove, accelerometer, electronics, amplifier, plastic sheets. First performed at Christ Church, Oxford." },
+        { "src": "depression_2.jpg", "caption": "Depression - Image 2" },
+        { "src": "depression_3.jpg", "caption": "Depression - Image 3" },
+        { "src": "depression_4.jpg", "caption": "Depression - Image 4" },
+        { "src": "depression_5.jpg", "caption": "Depression - Image 5" },
+        { "src": "depression_6.jpg", "caption": "Depression - Image 6" },
+        { "src": "depression_7.jpg", "caption": "Depression - Image 7" }
+    ],
+    "sunflower_field": [
+        { "src": "sunflower_field_1.jpeg", "caption": "Sunflower Field. 2024. Insect-eaten and sun-faded risograph posters. The Bishop\u2019s House Garden, Wolfson College." },
+        { "src": "sunflower_field_2.jpeg", "caption": "Sunflower Field - Image 2" },
+        { "src": "sunflower_field_3.jpeg", "caption": "Sunflower Field - Image 3" },
+        { "src": "sunflower_field_4.jpeg", "caption": "Sunflower Field - Image 4" }
+    ],
+    "stone_of_perseverance": [
+        { "src": "stone_of_perseverance_1.jpg", "caption": "Stone of Perseverance - Image 1" },
+        { "src": "stone_of_perseverance_2.jpg", "caption": "Stone of Perseverance - Image 2" }
+    ],
+    "a_crane_looking_back": [
+        { "src": "a_crane_looking_back_1.jpg", "caption": "A Crane Looking Back. 2024.  Spray paint on paper.  90 \u00d7 64 cm." },
+        { "src": "a_crane_looking_back_2.jpg", "caption": "An origami crane was used as a 3D graffiti stencil." }
+    ],
+    "ra_ra_ra": [
+        { "src": "ra_ra_ra_1.jpg", "caption": "RA RA RA - A3 risograph" }
+    ],
+    "oxford_war_memorial": [
+        { "src": "oxford_war_memorial_1.jpg", "caption": "Oxford War Memorial.  2024.  Pencil on paper.  38 \u00d7 56 cm. War is often propagandised as an act of love. The traumatic memory is frottaged into a paper document. Lines are erasable, scars are permanent, only to those who see them." },
+        { "src": "oxford_war_memorial_2.jpg", "caption": "Oxford War Memorial - Image 2" }
+    ],
+    "rose_in_jerry_can": [
+        { "src": "rose_in_jerry_can_1.jpg", "caption": "Rose in Jerry Can - Image 1" },
+        { "src": "rose_in_jerry_can_2.jpg", "caption": "Rose in Jerry Can - Image 2" }
+    ],
+    "karma": [
+        { "src": "karma_1.jpg", "caption": "Karma - Lego relief print" }
+    ],
+    "redpeace": [
+        { "src": "redpeace_1.jpg", "caption": "Redpeace - A3 risograph" },
+        { "src": "redpeace_2.jpg", "caption": "Redpeace - Image 2" }
+    ],
+    "gloves": [
+        { "src": "gloves_1.jpg", "caption": "Gloves - Soft ground etching" }
+
+    ],
+    "stay_strong": [
+        { "src": "stay_strong_1.jpg", "caption": "Stay Strong - Lego relief print" },
+        { "src": "stay_strong_2.jpg", "caption": "Stay Strong - Image 2" }
+    ],
+    "how_to_use_the_fire_extinguisher": [
+        { "src": "how_to_use_the_fire_extinguisher_1.jpg", "caption": "How to use the Fire Extinguisher.  2023.  Serigraph on paper.  28 \u00d7 76 cm." },
+        { "src": "how_to_use_the_fire_extinguisher_2.jpg", "caption": "How to Use the Fire Extinguisher - Image 2" },
+        { "src": "how_to_use_the_fire_extinguisher_3.jpg", "caption": "How to Use the Fire Extinguisher - Image 3" },
+        { "src": "how_to_use_the_fire_extinguisher_4.jpg", "caption": "How to Use the Fire Extinguisher - Image 4" },
+        { "src": "how_to_use_the_fire_extinguisher_5.jpg", "caption": "How to Use the Fire Extinguisher - Image 5" },
+        { "src": "how_to_use_the_fire_extinguisher_6.jpg", "caption": "How to Use the Fire Extinguisher - Image 6" },
+        { "src": "how_to_use_the_fire_extinguisher_7.jpg", "caption": "How to Use the Fire Extinguisher - Image 7" },
+        { "src": "how_to_use_the_fire_extinguisher_8.jpg", "caption": "How to Use the Fire Extinguisher - Image 8" }
+    ],
+    "seen_unseen": [
+        { "src": "seen_unseen_1.jpg", "caption": "Seen/Unseen - A6 risograph" }
+    ],
+    "flower_under_fire": [
+        { "src": "flower_under_fire_1.jpg", "caption": "Flower Under Fire - A4 risograph" },
+        { "src": "flower_under_fire_2.jpg", "caption": "Flower Under Fire - Image 2" },
+        { "src": "flower_under_fire_3.jpg", "caption": "Flower Under Fire - Image 3" }
+    ],
+    "tinder_sociology": [
+        { "src": "tinder_sociology_1.jpg", "caption": "Tinder Sociology - Riso poetry pamphlet" },
+        { "src": "tinder_sociology_2.jpg", "caption": "Tinder Sociology - Image 2" }
+    ],
+    "potato_peace": [
+        { "src": "potato_peace_1.jpg", "caption": "Potato Peace - Image 1" },
+        { "src": "potato_peace_2.jpg", "caption": "Potato Peace - Image 2" },
+        { "src": "potato_peace_3.jpg", "caption": "Potato Peace - Image 3" },
+        { "src": "potato_peace_4.jpg", "caption": "Potato Peace - Image 4" }
+    ],
+    "diu_series": [
+        { "src": "diu_series_1.jpg", "caption": "Diu \u5c4c - Lego relief print" },
+        { "src": "diu_series_2.jpg", "caption": "\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c\u5c4c" },
+        { "src": "diu_series_3.jpg", "caption": "Fiery \u5c4c" },
+        { "src": "diu_series_4.jpg", "caption": "Diu Series - Image 4" },
+        { "src": "diu_series_5.jpg", "caption": "Diu Series - Image 5" },
+        { "src": "diu_series_6.jpg", "caption": "Diu Series - Image 6" }
+    ],
+    "good_citizen": [
+        { "src": "good_citizen_1.jpg", "caption": "I Will Be a Good Citizen - A4 risographs" },
+        { "src": "good_citizen_2.jpg", "caption": "\u6211\u8981\u505a \u6211\u8981\u505a\u4e2a\u597d\u5e02\u6c11 II willl bee aa gg" },
+        { "src": "good_citizen_3.jpg", "caption": "\u6211\u8981\u505a\u4e2a\u597d\u5e02\u6c11 I will be a good citizen - Image 3" }
+    ],
+    "peach_stone": [
+        { "src": "peach_stone_1.jpg", "caption": "Peach Stone. 2024. Black Jesmonite and gravel." }
+    ],
+    "dove": [
+        { "src": "dove_1.jpg", "caption": "Dove - Hard ground etching" }
+    ],
+    "eye": [
+        { "src": "eye_1.jpg", "caption": "Eye. 2024. Linear actuator, paint roller, sponge, hydrochromic fabric, water, wire, metal box, sticker." },
+        { "src": "eye_2.jpg", "caption": "Eye - Image 2" },
+        { "src": "eye_3.jpg", "caption": "Eye - Image 3" }
+    ],
+    "finding_light_in_cosmic_indifference": [
+        { "src": "finding_light_in_cosmic_indifference_1.jpg", "caption": "Finding Light in Cosmic Indifference - Image 1" },
+        { "src": "finding_light_in_cosmic_indifference_2.jpg", "caption": "Finding Light in Cosmic Indifference - Image 2" }
+     
+    ],
+      "rip": [
+        { "src": "RIP_1.jpg", "caption": "RIP - Image 1" },
+        { "src": "RIP_2.jpg", "caption": "RIP - Image 2" }
+     
+    ]
+
+            };
+
+            const lightbox = document.querySelector('.lightbox');
+            const lightboxContent = document.querySelector('.lightbox-content');
+            const lightboxCaption = document.querySelector('.lightbox-caption');
+            const lightboxImg = document.querySelector('.lightbox img');
+            const leftArrow = document.querySelector('.arrow-left');
+            const rightArrow = document.querySelector('.arrow-right');
+
+            let currentImageIndex = 0;
+
+            function showImage(index) {
+                const image = artGalleries[artId][index];
+                lightboxImg.src = image.src;
+                lightboxCaption.textContent = image.caption;
+                currentImageIndex = index;
+            }
+
+            // Event handlers for arrow navigation
+            leftArrow.onclick = () => {
+                const newIndex = currentImageIndex - 1;
+                if (newIndex >= 0) {
+                    showImage(newIndex);
+                }
+            };
+
+            rightArrow.onclick = () => {
+                const newIndex = currentImageIndex + 1;
+                if (newIndex < artGalleries[artId].length) {
+                    showImage(newIndex);
+                }
+            };
+
+            lightbox.style.display = 'flex';
+            showImage(currentImageIndex);
         }
 
         function closeLightbox() {
