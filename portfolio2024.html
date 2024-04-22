@@ -318,7 +318,7 @@
 
         function filterArtworks(tag) {
             const artItems = document.querySelectorAll('.art-item');
-            const tagMessage = document.getElementor('tag-message');
+            const tagMessage = document.getElementById('tag-message');
 
             artItems.forEach((item) => {
                 const tags = item.getAttribute('data-tags').split(',').map(t => t.trim());
