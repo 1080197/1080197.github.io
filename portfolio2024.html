@@ -335,39 +335,66 @@
             const lightboxImg = document.querySelector('.lightbox img');
             const leftArrow = document.querySelector('.arrow-left');
             const rightArrow = document.querySelector('.arrow-right');
-
+        
             let currentImageIndex = 0;
 
-            function showImage(index) {
-                const image = artGalleries[artId][index];
-                lightboxImg.src = image.src;
-                lightboxCaption.textContent = image.caption;
-                currentImageIndex = index;
-            }
+    // Function to update the lightbox content and control arrow visibility
+    function showImage(index) {
+        const gallery = artGalleries[artId];
+        const image = gallery[index];
 
-            // Event handlers for arrow navigation
-            leftArrow.onclick = () => {
-                const newIndex = currentImageIndex - 1;
-                if (newIndex >= 0) {
-                    showImage(newIndex);
-                }
-            };
+        lightboxImg.src = image.src;
+        lightboxCaption.textContent = image.caption;
+        currentImageIndex = index;
 
-            rightArrow.onclick = () => {
-                const newIndex = currentImageIndex + 1;
-                if (newIndex < artGalleries[artId].length) {
-                    showImage(newIndex);
-                }
-            };
+        // Update arrow visibility
+        leftArrow.style.display = index === 0 ? 'none' : 'block';
+        rightArrow.style.display = index === gallery.length - 1 ? 'none' : 'block';
+    }
 
-            lightbox.style.display = 'flex';
-            showImage(currentImageIndex);
+    // Navigation functions
+    function navigateLeft() {
+        if (currentImageIndex > 0) {
+            showImage(currentImageIndex - 1);
         }
+    }
 
-        function closeLightbox() {
-            const lightbox = document.querySelector('.lightbox');
-            lightbox.style.display = 'none';
+    function navigateRight() {
+        if (currentImageIndex < artGalleries[artId].length - 1) {
+            showImage(currentImageIndex + 1);
         }
+    }
+
+    // Event handlers for arrow navigation
+    leftArrow.onclick = navigateLeft;
+    rightArrow.onclick = navigateRight;
+
+    // Keyboard navigation
+    document.onkeydown = (e) => {
+        switch (e.key) {
+            case 'ArrowLeft':
+                navigateLeft();
+                break;
+            case 'ArrowRight':
+                navigateRight();
+                break;
+            case 'Escape':
+                closeLightbox();
+                break;
+        }
+    };
+
+    // Show the lightbox and the first image
+    lightbox.style.display = 'flex';
+    showImage(currentImageIndex);
+}
+
+// Function to close the lightbox
+function closeLightbox() {
+    const lightbox = document.querySelector('.lightbox');
+    lightbox.style.display = 'none';
+    document.onkeydown = null; // Remove keyboard listener when lightbox is closed
+}
 
         function filterArtworks(tag) {
             const artItems = document.querySelectorAll('.art-item');
